@@ -4,7 +4,8 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
-      # Type the command to log in to your Docker Hub account here.          
+      # Type the command to log in to your Docker Hub account here.   
+      - IMAGE_TAG=$(git rev-parse --short HEAD)       
   build:
     commands:
       - echo Build started on `date`
