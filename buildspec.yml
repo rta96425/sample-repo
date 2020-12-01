@@ -3,29 +3,29 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 19
-  pre_build:
+      docker: 18
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=https://github.com/rta96425/sample-repo
+      ## ecs-deployのインストール
+      - yum install -y jq which
+      - curl -OL https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy
+      - chmod +x ecs-deploy
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+
+  pre_build:
+    commands:
+      ## ECRにログイン
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+
   build:
     commands:
-      - echo Build started on `date`
-      - echo $REPOSITORY_URI $IMAGE_TAG $CODEBUILD_RESOLVED_SOURCE_VERSION ${COMMIT_HASH:=latest}
-      - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"sample-repo","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-artifacts:
-    files: imagedefinitions.json
+      ## Dockerイメージのビルド
+      - docker build -t $IMAGE_REPOSITORY_NAME:latest .
+      - docker tag $IMAGE_REPOSITORY_NAME:latest $IMAGE_REPOSITORY_NAME:$IMAGE_TAG
+
+      ## DockerイメージのECRへのプッシュ
+      - docker push $IMAGE_REPOSITORY_NAME:latest
+      - docker push $IMAGE_REPOSITORY_NAME:$IMAGE_TAG
+
+      ## ECSへのデプロイ
+      - ./ecs-deploy -n $ESC_SERVICE_NAME -c $ESC_CLUSTER_NAME -i $IMAGE_REPOSITORY_NAME:latest -r $AWS_DEFAULT_REGION -t 1200
