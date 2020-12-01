@@ -11,17 +11,17 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      #- docker build -t 'sample-repo':5355f02 .
-      - docker build -t 'sample-repo':5355f02 .
-      #- docker tag 'sample-repo':5355f02 'sample-repo':5355f02
-      - docker tag 'sample-repo':5355f02 'sample-repo':5355f02
+      #- docker build -t sample-repo:5355f02 .
+      - docker build -t sample-repo:5355f02 .
+      #- docker tag sample-repo:5355f02 sample-repo:5355f02
+      - docker tag sample-repo:5355f02 sample-repo:5355f02
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      #- docker push 'sample-repo':5355f02
+      #- docker push sample-repo:5355f02
       #- printf '[{"name":"container_name","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
-      - docker push 'sample-repo':5355f02
-      - printf '[{"name":"container_name","imageUri":"%s"}]' 'https://github.com/rta96425/sample-repo':latest > imagedefinitions.json
+      - docker push sample-repo:5355f02
+      - printf '[{"name":"container_name","imageUri":"%s"}]' https://github.com/rta96425/sample-repo:latest > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
