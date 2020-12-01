@@ -11,13 +11,17 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $IMAGE_REPO_NAME:$IMAGE_TAG
+      #- docker build -t 'https://github.com/rta96425/sample-repo:5355f02' .
+      - docker build -t 'https://github.com/rta96425/sample-repo:5355f02' .
+      #- docker tag 'https://github.com/rta96425/sample-repo:5355f02' 'https://github.com/rta96425/sample-repo:5355f02'
+      - docker tag 'https://github.com/rta96425/sample-repo:5355f02' 'https://github.com/rta96425/sample-repo:5355f02'
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $IMAGE_REPO_NAME:$IMAGE_TAG
+      #- docker push 'https://github.com/rta96425/sample-repo:5355f02'
+      #- printf '[{"name":"container_name","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+      - docker push 'https://github.com/rta96425/sample-repo:5355f02'
       - printf '[{"name":"container_name","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
