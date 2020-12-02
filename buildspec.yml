@@ -14,8 +14,6 @@ phases:
       #- chown -R 1000:1000 sample-repo
       - ls -l
       - ls -l /
-      - curl -sSL https://get.docker.com/ | sh
-      - systemctl start docker
   pre_build:
     commands:
       ## ECRにログイン
@@ -24,6 +22,7 @@ phases:
   build:
     commands:
       ## Dockerイメージのビルド
+      - docker --version
       - docker build -t my-image .
       - docker tag $IMAGE_REPOSITORY_NAME:latest $IMAGE_REPOSITORY_NAME:$IMAGE_TAG
 
