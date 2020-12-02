@@ -11,9 +11,7 @@ phases:
       - chmod +x ecs-deploy
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
-      #- chown -R 1000:1000 sample-repo
-      - ls -l
-      - ls -l /
+
   pre_build:
     commands:
       ## ECRにログイン
@@ -22,8 +20,8 @@ phases:
   build:
     commands:
       ## Dockerイメージのビルド
-      - docker --version
-      - docker build -t my-image .
+      - docker images
+      - docker build -t my-image:latest .
       - docker tag $IMAGE_REPOSITORY_NAME:latest $IMAGE_REPOSITORY_NAME:$IMAGE_TAG
 
       ## DockerイメージのECRへのプッシュ
