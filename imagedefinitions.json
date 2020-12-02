@@ -1,8 +1,8 @@
 {
-    "family": "sample-container-ec2",
+    "family": "ec2-service-test02",
     "containerDefinitions": [
         {
-            "name": "sample-container-ec2",
+            "name": "ec2-service-test02",
             "image": "628424922629.dkr.ecr.ap-northeast-1.amazonaws.com/my-image:latest",
             "cpu": 10,
             "memory": 128,
