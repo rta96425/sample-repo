@@ -20,8 +20,8 @@ phases:
   build:
     commands:
       ## Dockerイメージのビルド
-      - docker images
-      - docker build -t my-image:latest .
+      - echo $IMAGE_REPOSITORY_NAME $IMAGE_TAG $ESC_SERVICE_NAME $ESC_CLUSTER_NAME
+      - docker build -t $IMAGE_REPOSITORY_NAME:latest .
       - docker tag $IMAGE_REPOSITORY_NAME:latest $IMAGE_REPOSITORY_NAME:$IMAGE_TAG
 
       ## DockerイメージのECRへのプッシュ
